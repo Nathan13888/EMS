@@ -1,8 +1,8 @@
-package net.pdsb.nathan13888.hashtable;
+package net.pdsb.nathan13888.ems.hashtable;
 
 import java.util.ArrayList;
 
-import net.pdsb.nathan13888.types.EmployeeInfo;
+import net.pdsb.nathan13888.ems.types.EmployeeInfo;
 
 public class MyHashTable {
 

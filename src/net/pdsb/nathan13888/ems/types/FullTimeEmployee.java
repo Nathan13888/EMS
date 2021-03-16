@@ -1,4 +1,4 @@
-package net.pdsb.nathan13888.types;
+package net.pdsb.nathan13888.ems.types;
 
 public class FullTimeEmployee extends EmployeeInfo {
 

@@ -1,10 +1,10 @@
-package net.pdsb.nathan13888.hashtable;
+package net.pdsb.nathan13888.ems.hashtable;
 
 import java.util.Random;
 
-import net.pdsb.nathan13888.types.EmployeeInfo;
-import net.pdsb.nathan13888.types.FullTimeEmployee;
-import net.pdsb.nathan13888.types.PartTimeEmployee;
+import net.pdsb.nathan13888.ems.types.EmployeeInfo;
+import net.pdsb.nathan13888.ems.types.FullTimeEmployee;
+import net.pdsb.nathan13888.ems.types.PartTimeEmployee;
 
 public class TestHashTable {
 
