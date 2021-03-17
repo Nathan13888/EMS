@@ -13,7 +13,7 @@ public class MyHashTable {
 	// CONSTRUCTOR
 
 	@SuppressWarnings("unchecked")
-	public MyHashTable(int howManyBuckets) { // assuming howManyBuckets is vali
+	public MyHashTable(int howManyBuckets) { // assuming howManyBuckets is valid
 		this.buckets = new ArrayList[howManyBuckets];
 
 		// For each element in the array, instantiate its ArrayList.
@@ -26,6 +26,10 @@ public class MyHashTable {
 
 	public int calcBucket(int studentNumber) {
 		return (studentNumber < 0) ? (calcBucket(studentNumber + buckets.length)) : (studentNumber % buckets.length);
+	}
+
+	public void add(EmployeeInfo info) {
+		addToTable(info);
 	}
 
 	public void addToTable(EmployeeInfo theStudent) { // Add the student referenced by theStudent to the hash table.
@@ -54,6 +58,10 @@ public class MyHashTable {
 		return null;
 	}
 
+	public EmployeeInfo get(int studentNumber) {
+		return getFromTable(studentNumber);
+	}
+
 	public EmployeeInfo getFromTable(int studentNumber) {
 		// Return the reference value for that student, return null if student isn't in
 		// the table.
@@ -71,6 +79,15 @@ public class MyHashTable {
 			if (student.empNumber == studentNumber)
 				return true;
 		return false;
+	}
+
+	public ArrayList<EmployeeInfo> getItems() {
+		ArrayList<EmployeeInfo> ret = new ArrayList<EmployeeInfo>();
+
+		for (ArrayList<EmployeeInfo> bucket : this.buckets)
+			ret.addAll(bucket);
+
+		return ret;
 	}
 
 	public void displayTable() {
