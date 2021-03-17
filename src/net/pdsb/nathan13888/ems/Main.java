@@ -8,6 +8,7 @@ import net.pdsb.nathan13888.ems.ui.EMSWindow;
 public class Main {
 
 	public static Display display;
+	public static EMSWindow window;
 
 	public static void main(String[] args) {
 		System.out.println("Starting EMS");
@@ -16,7 +17,7 @@ public class Main {
 
 		display = new Display();
 
-		new EMSWindow(display);
+		window = new EMSWindow(display);
 	}
 
 }
