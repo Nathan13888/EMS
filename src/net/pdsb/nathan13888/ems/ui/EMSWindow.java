@@ -1,15 +1,11 @@
 package net.pdsb.nathan13888.ems.ui;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 import net.pdsb.nathan13888.ems.ui.components.TableWidget;
-import net.pdsb.nathan13888.ems.ui.menus.FileMenu;
 
 public class EMSWindow {
 
@@ -46,15 +42,8 @@ public class EMSWindow {
 	}
 
 	private void loadWidgets() {
-		Menu bar = new Menu(this.shell, SWT.BAR);
+		new EMSMenuBar(this.shell);
 
-		MenuItem fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		fileMenuHeader.setText("&File");
-		FileMenu fileMenu = new FileMenu(shell);
-		fileMenuHeader.setMenu(fileMenu.menu);
-
-		this.shell.setMenuBar(bar);
-
-		new TableWidget(shell);
+		new TableWidget(this.shell);
 	}
 }

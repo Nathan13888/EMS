@@ -14,6 +14,11 @@ public class FileMenu {
 	public FileMenu(Decorations parent) {
 		menu = new Menu(parent, SWT.DROP_DOWN);
 
+		MenuItem newMenuItem = new MenuItem(menu, SWT.CASCADE);
+		newMenuItem.setText("&New");
+		NewMenu newMenu = new NewMenu(menu);
+		newMenuItem.setMenu(newMenu.menu);
+
 		MenuItem exitItem = new MenuItem(this.menu, SWT.PUSH);
 		exitItem.setText("&Exit");
 		exitItem.addSelectionListener(new ExitButtonListener());
