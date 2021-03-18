@@ -24,7 +24,7 @@ public class MyHashTable {
 
 	// METHODS
 
-	public int calcBucket(int studentNumber) {
+	private int calcBucket(int studentNumber) {
 		return (studentNumber < 0) ? (calcBucket(studentNumber + buckets.length)) : (studentNumber % buckets.length);
 	}
 
@@ -32,7 +32,7 @@ public class MyHashTable {
 		addToTable(info);
 	}
 
-	public void addToTable(EmployeeInfo theStudent) { // Add the student referenced by theStudent to the hash table.
+	void addToTable(EmployeeInfo theStudent) { // Add the student referenced by theStudent to the hash table.
 		if (theStudent != null) {
 			int targetBucket = calcBucket(theStudent.empNumber);
 			// Append that student to the ArrayList for that bucket.
@@ -42,7 +42,11 @@ public class MyHashTable {
 
 	}
 
-	public EmployeeInfo removeFromTable(int studentNumber) {
+	public EmployeeInfo pop(int number) {
+		return removeFromTable(number);
+	}
+
+	EmployeeInfo removeFromTable(int studentNumber) {
 		// Remove that student from the hash table and return the reference value for
 		// that student.
 		if (studentNumber >= 0) {
@@ -62,7 +66,7 @@ public class MyHashTable {
 		return getFromTable(studentNumber);
 	}
 
-	public EmployeeInfo getFromTable(int studentNumber) {
+	EmployeeInfo getFromTable(int studentNumber) {
 		// Return the reference value for that student, return null if student isn't in
 		// the table.
 		if (studentNumber >= 0) {
