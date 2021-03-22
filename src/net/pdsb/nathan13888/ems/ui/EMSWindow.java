@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.ui.components.TableWidget;
 
 public class EMSWindow {
@@ -12,8 +13,10 @@ public class EMSWindow {
 	static final String NAME = "Employee Management System";
 
 	public Shell shell;
+	public TableWidget table;
 
 	public EMSWindow(Display display) {
+		Main.window = this;
 		shell = new Shell(display);
 
 		Display.setAppName(NAME);
@@ -44,6 +47,6 @@ public class EMSWindow {
 	private void loadWidgets() {
 		new EMSMenuBar(this.shell);
 
-		new TableWidget(this.shell);
+		this.table = new TableWidget(this.shell);
 	}
 }

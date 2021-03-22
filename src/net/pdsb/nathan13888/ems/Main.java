@@ -17,7 +17,13 @@ public class Main {
 
 		display = new Display();
 
-		window = new EMSWindow(display);
+		new EMSWindow(display);
+	}
+
+	public static void exit() {
+		System.out.println("Exiting EMS");
+		window.shell.close();
+		display.dispose();
 	}
 
 }
