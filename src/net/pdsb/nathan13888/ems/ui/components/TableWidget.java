@@ -13,15 +13,29 @@ import net.pdsb.nathan13888.ems.types.EmployeeInfo;
 
 public class TableWidget {
 
+	private Table table;
+	private String[] titles = { "Employee #", "Name", "Email", "Gender", "Location" };
+
 	public TableWidget(Shell shell) {
-		Table table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		String[] titles = { "Employee #", "Name", "Email", "Gender", "Location" };
 		for (int i = 0; i < titles.length; i++) {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 			column.setText(titles[i]);
 		}
+
+		GridData layoutData = new GridData(GridData.FILL_BOTH);
+		layoutData.minimumHeight = 225;
+		layoutData.minimumWidth = 225;
+		layoutData.grabExcessVerticalSpace = true;
+		table.setLayoutData(layoutData);
+		table.setSize(table.computeSize(SWT.FILL, SWT.FILL));
+
+		this.load();
+	}
+
+	private void load() {
 		for (EmployeeInfo info : DB.table.getItems()) {
 			TableItem item = new TableItem(table, SWT.NONE);
 			item.setText(0, String.valueOf(info.empNumber));
@@ -33,12 +47,11 @@ public class TableWidget {
 		for (int i = 0; i < titles.length; i++) {
 			table.getColumn(i).pack();
 		}
+	}
 
-		GridData layoutData = new GridData(GridData.FILL_BOTH);
-		layoutData.minimumHeight = 225;
-		layoutData.minimumWidth = 225;
-		layoutData.grabExcessVerticalSpace = true;
-		table.setLayoutData(layoutData);
-		table.setSize(table.computeSize(SWT.FILL, SWT.FILL));
+	public void reload() {
+		System.out.println("Reloading TableWidget...");
+		this.table.removeAll();
+		this.load();
 	}
 }
