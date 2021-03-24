@@ -1,5 +1,7 @@
 package net.pdsb.nathan13888.ems.ui.components;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Shell;
@@ -32,11 +34,11 @@ public class TableWidget {
 		table.setLayoutData(layoutData);
 		table.setSize(table.computeSize(SWT.FILL, SWT.FILL));
 
-		this.load();
+		this.load(DB.table.getItems());
 	}
 
-	private void load() {
-		for (EmployeeInfo info : DB.table.getItems()) {
+	private void load(ArrayList<EmployeeInfo> employees) {
+		for (EmployeeInfo info : employees) {
 			TableItem item = new TableItem(table, SWT.NONE);
 			item.setText(0, String.valueOf(info.empNumber));
 			item.setText(1, info.firstName + " " + info.lastName);
@@ -50,8 +52,12 @@ public class TableWidget {
 	}
 
 	public void reload() {
+		this.reload(DB.table.getItems());
+	}
+
+	public void reload(ArrayList<EmployeeInfo> employees) {
 		System.out.println("Reloading TableWidget...");
 		this.table.removeAll();
-		this.load();
+		this.load(employees);
 	}
 }
