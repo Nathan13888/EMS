@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import net.pdsb.nathan13888.ems.Main;
-import net.pdsb.nathan13888.ems.ui.forms.NewContactForm;
+import net.pdsb.nathan13888.ems.ui.forms.EmployeeInfoForm;
 
 public class NewMenu {
 
@@ -22,7 +22,7 @@ public class NewMenu {
 		newEmployee.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				NewContactForm wizard = new NewContactForm();
+				EmployeeInfoForm wizard = new EmployeeInfoForm();
 
 				WizardDialog dialog = new WizardDialog(Main.window.shell, wizard);
 				dialog.open();
