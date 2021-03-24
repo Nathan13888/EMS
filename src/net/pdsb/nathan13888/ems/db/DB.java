@@ -37,4 +37,11 @@ public class DB {
 		}
 	}
 
+	public static void add(EmployeeInfo info) {
+		if (info == null)
+			return;
+		System.out.println("Adding employee " + info.firstName + " " + info.lastName);
+		table.add(info);
+	}
+
 }
