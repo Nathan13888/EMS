@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import net.pdsb.nathan13888.ems.Main;
+import net.pdsb.nathan13888.ems.db.DB;
 
 public class FileMenu {
 
@@ -20,6 +21,21 @@ public class FileMenu {
 		newMenuItem.setText("&New");
 		NewMenu newMenu = new NewMenu(menu);
 		newMenuItem.setMenu(newMenu.menu);
+
+		MenuItem populateDBItem = new MenuItem(menu, SWT.PUSH);
+		populateDBItem.setText("&Generate Random Data");
+		populateDBItem.setToolTipText("Populate current database with random data");
+		populateDBItem.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				DB.generateRandomData();
+				Main.window.table.reload();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
 
 		MenuItem reloadItem = new MenuItem(menu, SWT.PUSH);
 		reloadItem.setText("&Reload");
