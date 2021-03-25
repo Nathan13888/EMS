@@ -7,19 +7,18 @@ public class EmployeeInfo {
 	public String lastName;
 	public String email;
 	public Gender gender;
-	public String location;
+	public Address address;
+	public long homePhone, businessPhone;
 	public double deductionsRate; // decimal percentage
+	public String notes;
 
 	public EmployeeType type;
 
-	public EmployeeInfo(int eN, String fN, String lN, String email, Gender g, String wL, double dR) {
+	public EmployeeInfo(int eN, String fN, String lN, Gender g) {
 		this.empNumber = eN;
 		this.firstName = fN;
 		this.lastName = lN;
-		this.email = email;
 		this.gender = g;
-		this.location = wL;
-		this.deductionsRate = dR;
 	}
 
 	public double calcAnnualGrossIncome() {

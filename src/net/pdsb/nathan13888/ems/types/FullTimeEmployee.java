@@ -2,16 +2,15 @@ package net.pdsb.nathan13888.ems.types;
 
 public class FullTimeEmployee extends EmployeeInfo {
 
-	protected double yearlySalary;
+	public double yearlySalary;
 
 	// for testing
 	public FullTimeEmployee(int eN) {
-		this(eN, "first", "last", "email@email.com", Gender.OTHER, "unknown", 0.05, 100000.0);
+		this(eN, "first", "last", Gender.OTHER);
 	}
 
-	public FullTimeEmployee(int eN, String fN, String lN, String email, Gender g, String wL, double dR, double sal) {
-		super(eN, fN, lN, email, g, wL, dR);
-		this.yearlySalary = sal;
+	public FullTimeEmployee(int eN, String fN, String lN, Gender g) {
+		super(eN, fN, lN, g);
 		this.type = EmployeeType.FULLTIME;
 	}
 
