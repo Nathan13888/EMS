@@ -1,5 +1,7 @@
 package net.pdsb.nathan13888.ems.ui.forms;
 
+import java.util.Random;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -15,12 +17,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.db.DB;
+import net.pdsb.nathan13888.ems.types.Address;
 import net.pdsb.nathan13888.ems.types.EmployeeInfo;
+import net.pdsb.nathan13888.ems.types.FullTimeEmployee;
+import net.pdsb.nathan13888.ems.types.Gender;
+import net.pdsb.nathan13888.ems.types.PartTimeEmployee;
 
 public class EmployeeInfoForm extends Wizard {
 
 	private ISelection selection;
+	private InfoPage infoPage;
+	private SalaryPage salaryPage;
 
 	public EmployeeInfoForm() {
 		super();
@@ -29,15 +38,56 @@ public class EmployeeInfoForm extends Wizard {
 
 	@Override
 	public void addPages() {
-		this.addPage(new InfoPage(selection));
-		this.addPage(new SalaryPage(selection));
+		infoPage = new InfoPage(selection);
+		salaryPage = new SalaryPage(selection);
+		this.addPage(infoPage);
+		this.addPage(salaryPage);
 	}
 
 	@Override
 	public boolean performFinish() {
+		System.out.println("Creating New Employee...");
+
 		EmployeeInfo info = null;
+		int empNumber = new Random().nextInt(900000) + 100000;
+		String firstName = infoPage.firstNameText.getText();
+		String lastName = infoPage.lastNameText.getText();
+		String email = infoPage.lastNameText.getText();
+		Gender gender;
+		if (infoPage.maleButton.getSelection())
+			gender = Gender.MALE;
+		else if (infoPage.femaleButton.getSelection())
+			gender = Gender.FEMALE;
+		else
+			gender = Gender.OTHER;
+		Address address = new Address(infoPage.homeAddressText.getText());
+		long homePhone = Long.parseLong(infoPage.homePhoneText.getText());
+		long businessPhone = Long.parseLong(infoPage.businessPhoneText.getText());
+		double deductionsRate = Double.parseDouble(salaryPage.deductionsText.getText());
+		String notes = infoPage.notesText.getText();
+
+		if (salaryPage.fteButton.getSelection()) {
+			info = new FullTimeEmployee(empNumber, firstName, lastName, gender);
+			((FullTimeEmployee) info).yearlySalary = Double.parseDouble(salaryPage.annualSalaryText.getText());
+		} else if (salaryPage.pteButton.getSelection()) {
+			info = new PartTimeEmployee(empNumber, firstName, lastName, gender);
+			((PartTimeEmployee) info).hourlyWage = Double.parseDouble(salaryPage.hourlyWageText.getText());
+			((PartTimeEmployee) info).hoursPerWeek = Double.parseDouble(salaryPage.hpwText.getText());
+			((PartTimeEmployee) info).weeksPerYear = Double.parseDouble(salaryPage.wpyText.getText());
+		} else {
+			System.err.println(new Error("WHAT ON EARTH IS WRONG WITH YOUR SANITIZING"));
+			return false;
+		}
+
+		info.email = email;
+		info.address = address;
+		info.homePhone = homePhone;
+		info.businessPhone = businessPhone;
+		info.deductionsRate = deductionsRate;
+		info.notes = notes;
 
 		DB.add(info);
+		Main.window.table.reload();
 
 		return true;
 	}
@@ -49,13 +99,14 @@ class InfoPage extends WizardPage {
 
 	private Label label;
 	private GridData gd;
-	private Text firstNameText;
-	private Text lastNameText;
-	private Text emailText;
-	private Text homeAddressText;
-	private Text homePhoneText;
-	private Text businessPhoneText;
-	private Text notesText;
+	public Text firstNameText;
+	public Text lastNameText;
+	public Text emailText;
+	public Button maleButton, femaleButton, otherButton;
+	public Text homeAddressText;
+	public Text homePhoneText;
+	public Text businessPhoneText;
+	public Text notesText;
 
 	public InfoPage(ISelection selection) {
 		super("newEmployee");
@@ -92,6 +143,20 @@ class InfoPage extends WizardPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		emailText.setLayoutData(gd);
 		emailText.addModifyListener(new ModifyDialogEvent());
+
+		label = new Label(container, SWT.NULL);
+		label.setText("&Gender: ");
+		Composite box = new Composite(container, SWT.NULL);
+		layout = new GridLayout(3, true);
+		layout.marginWidth = 0;
+		box.setLayout(layout);
+		box.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		maleButton = new Button(box, SWT.RADIO);
+		maleButton.setText("Male");
+		femaleButton = new Button(box, SWT.RADIO);
+		femaleButton.setText("Female");
+		femaleButton = new Button(box, SWT.RADIO);
+		femaleButton.setText("Other");
 
 		createLine(container, layout.numColumns);
 
@@ -161,12 +226,12 @@ class SalaryPage extends WizardPage {
 	private Label label;
 	private GridData gd;
 
-	private Button fteButton, pteButton;
-	private Text annualSalaryText;
-	private Text hourlyWageText;
-	private Text hpwText;
-	private Text wpyText;
-	private Text deductionsText;
+	public Button fteButton, pteButton;
+	public Text annualSalaryText;
+	public Text hourlyWageText;
+	public Text hpwText;
+	public Text wpyText;
+	public Text deductionsText;
 
 	public SalaryPage(ISelection selection) { // TODO: employee image
 		super("newEmployee");
@@ -253,7 +318,6 @@ class SalaryPage extends WizardPage {
 		public void widgetSelected(SelectionEvent arg0) {
 			dialogChanged();
 		}
-
 	}
 
 	private void dialogChanged() { // TODO: sanitize input: if input in class is invalid, then update status
