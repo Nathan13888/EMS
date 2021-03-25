@@ -17,6 +17,7 @@ public class TableWidget {
 
 	private Table table;
 	private String[] titles = { "Employee #", "Name", "Email", "Gender", "Location" };
+	private ArrayList<EmployeeInfo> data;
 
 	public TableWidget(Shell shell) {
 		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
@@ -44,11 +45,12 @@ public class TableWidget {
 			item.setText(1, info.firstName + " " + info.lastName);
 			item.setText(2, info.email);
 			item.setText(3, Utils.toTitleCase(info.gender.name()));
-			item.setText(4, info.location);
+			item.setText(4, info.address.getAddress());
 		}
 		for (int i = 0; i < titles.length; i++) {
 			table.getColumn(i).pack();
 		}
+		this.data = employees;
 	}
 
 	public void reload() {
@@ -59,5 +61,9 @@ public class TableWidget {
 		System.out.println("Reloading TableWidget...");
 		this.table.removeAll();
 		this.load(employees);
+	}
+
+	public ArrayList<EmployeeInfo> getData() {
+		return this.data;
 	}
 }
