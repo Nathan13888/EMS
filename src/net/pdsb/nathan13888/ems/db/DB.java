@@ -51,8 +51,16 @@ public class DB {
 		if (info == null) {
 			System.err.println("NULL was attempted to be added to the database ;(");
 			return;
+		} else if (table.isInTable(info.empNumber)) {
+			System.out.println("Removing employee " + info.empNumber + " " + info.firstName + " " + info.lastName);
+			EmployeeInfo ret = table.pop(info.empNumber);
+			if (ret != null && ret.empNumber == info.empNumber) {
+				//
+			} else {
+				System.err.println("PROBLEM WHEN REMOVING EMPLOYEE " + info);
+			}
 		}
-		System.out.println("Adding employee " + info.firstName + " " + info.lastName);
+		System.out.println("Adding employee " + info.empNumber + " " + info.firstName + " " + info.lastName);
 		table.add(info);
 	}
 
