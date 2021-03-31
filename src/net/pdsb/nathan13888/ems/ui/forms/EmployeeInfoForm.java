@@ -49,7 +49,8 @@ public class EmployeeInfoForm extends Wizard {
 		System.out.println("Creating New Employee...");
 
 		EmployeeInfo info = null;
-		int empNumber = new Random().nextInt(900000) + 100000;
+		int empNumber = infoPage.randomEmpNumber.getSelection() ? (new Random().nextInt(900000) + 100000)
+				: Integer.parseInt(infoPage.empNumberText.getText());
 		String firstName = infoPage.firstNameText.getText();
 		String lastName = infoPage.lastNameText.getText();
 		String email = infoPage.lastNameText.getText();
@@ -99,6 +100,9 @@ class InfoPage extends WizardPage {
 
 	private Label label;
 	private GridData gd;
+	private Composite box;
+	public Text empNumberText;
+	public Button randomEmpNumber;
 	public Text firstNameText;
 	public Text lastNameText;
 	public Text emailText;
@@ -124,6 +128,21 @@ class InfoPage extends WizardPage {
 		container.setLayout(layout);
 
 		label = new Label(container, SWT.NULL);
+		label.setText("&Employee Number: ");
+		box = new Composite(container, SWT.NULL);
+		layout = new GridLayout(2, true);
+		layout.marginWidth = 0;
+		box.setLayout(layout);
+		box.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		empNumberText = new Text(box, SWT.BORDER | SWT.SINGLE);
+		empNumberText.setLayoutData(gd);
+		randomEmpNumber = new Button(box, SWT.CHECK);
+		randomEmpNumber.setText("Random");
+		randomEmpNumber.addSelectionListener(new SelectionButtonEvent());
+		randomEmpNumber.setSelection(true);
+
+		label = new Label(container, SWT.NULL);
 		label.setText("&First Name: ");
 		firstNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -146,7 +165,7 @@ class InfoPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText("&Gender: ");
-		Composite box = new Composite(container, SWT.NULL);
+		box = new Composite(container, SWT.NULL);
 		layout = new GridLayout(3, true);
 		layout.marginWidth = 0;
 		box.setLayout(layout);
@@ -155,8 +174,8 @@ class InfoPage extends WizardPage {
 		maleButton.setText("Male");
 		femaleButton = new Button(box, SWT.RADIO);
 		femaleButton.setText("Female");
-		femaleButton = new Button(box, SWT.RADIO);
-		femaleButton.setText("Other");
+		otherButton = new Button(box, SWT.RADIO);
+		otherButton.setText("Other");
 
 		createLine(container, layout.numColumns);
 
@@ -188,7 +207,7 @@ class InfoPage extends WizardPage {
 		gd.heightHint = 200;
 		notesText.setLayoutData(gd);
 
-		// dialogChanged();
+		dialogChanged();
 		setControl(container);
 	}
 
@@ -199,9 +218,23 @@ class InfoPage extends WizardPage {
 		}
 	}
 
-	private void dialogChanged() { // TODO: sanitize input: if input in class is invalid, then update status
-//		updateStatus("");
+	private class SelectionButtonEvent implements SelectionListener {
+		@Override
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+			this.widgetSelected(arg0);
+		}
 
+		@Override
+		public void widgetSelected(SelectionEvent arg0) {
+			dialogChanged();
+		}
+	}
+
+	private void dialogChanged() { // TODO: sanitize input: if input in class is invalid, then update status
+		if (randomEmpNumber.getSelection())
+			empNumberText.setEnabled(false);
+		else
+			empNumberText.setEnabled(true);
 		updateStatus(null);
 	}
 
