@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -20,13 +22,27 @@ public class TableWidget {
 	private ArrayList<EmployeeInfo> data;
 
 	public TableWidget(Shell shell) {
-		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		for (int i = 0; i < titles.length; i++) {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 			column.setText(titles[i]);
 		}
+		table.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				String string = event.detail == SWT.CHECK ? "Checked" : "Selected";
+				System.out.println(event.item + " " + string);
+				if (event.item instanceof TableItem) {
+					TableItem item = (TableItem) event.item;
+					int empNum = Integer.parseInt(item.getText(0));
+					System.out.println("Querying data for " + empNum);
+				} else {
+					System.err.println("UNEXPECTED: " + event.item + " is not of type TableItem...");
+				}
+			}
+		});
 
 		GridData layoutData = new GridData(GridData.FILL_BOTH);
 		layoutData.minimumHeight = 225;
