@@ -2,7 +2,10 @@ package net.pdsb.nathan13888.ems.db;
 
 import java.util.Random;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+
 import net.pdsb.nathan13888.ems.Config;
+import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.hashtable.MyHashTable;
 import net.pdsb.nathan13888.ems.types.Address;
 import net.pdsb.nathan13888.ems.types.EmployeeInfo;
@@ -13,6 +16,8 @@ import net.pdsb.nathan13888.ems.types.PartTimeEmployee;
 public class DB {
 
 	public static MyHashTable table = new MyHashTable(Config.BUCKETS);
+
+	public static boolean MODIFIED = false;
 
 	public static void generateRandomData() {
 		String[] first = { "John", "Bob", "Daniel", "Tom", "Jack" };
@@ -60,13 +65,28 @@ public class DB {
 				System.err.println("PROBLEM WHEN REMOVING EMPLOYEE " + info);
 			}
 		}
+		MODIFIED = true;
 		System.out.println("Adding employee " + info.empNumber + " " + info.firstName + " " + info.lastName);
 		table.add(info);
+		if (table.isInTable(info.empNumber))
+			MessageDialog.openInformation(Main.window.shell, "Information",
+					"Employee " + info.empNumber + " (" + info.firstName + " " + info.lastName + ") was changed.");
+		else
+			MessageDialog.openError(Main.window.shell, "Error", "Employee " + info.empNumber + " could not be added.");
+	}
+
+	public static void update(int num, EmployeeInfo info) {
+		if (remove(num) == null)
+			System.err.println("There has been a problem removing employee " + num);
+		add(info);
 	}
 
 	public static EmployeeInfo remove(int num) {
 		System.out.println("Attempting to remove employee " + num);
-		return table.pop(num);
+		EmployeeInfo res = table.pop(num);
+		if (res != null)
+			MODIFIED = true;
+		return res;
 	}
 
 	public static EmployeeInfo query(int num) {
