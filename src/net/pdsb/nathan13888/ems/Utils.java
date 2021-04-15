@@ -1,8 +1,10 @@
 package net.pdsb.nathan13888.ems;
 
 import java.awt.Desktop;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 public class Utils {
 
@@ -22,6 +24,18 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public static String encodeURI(String s) {
+		String result;
+		try {
+			result = URLEncoder.encode(s, "UTF-8").replaceAll("\\+", "%20").replaceAll("\\%21", "!")
+					.replaceAll("\\%27", "'").replaceAll("\\%28", "(").replaceAll("\\%29", ")")
+					.replaceAll("\\%7E", "~");
+		} catch (UnsupportedEncodingException e) {
+			result = s;
+		}
+		return result;
 	}
 
 	public static boolean openWebpage(URI uri) {
