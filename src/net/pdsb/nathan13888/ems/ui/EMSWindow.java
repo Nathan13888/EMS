@@ -1,6 +1,5 @@
 package net.pdsb.nathan13888.ems.ui;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -29,7 +28,7 @@ public class EMSWindow {
 		lay.marginBottom = 0;
 		shell.setLayout(lay);
 		shell.setSize(1920, 1080);
-		shell.setBackground(new Color(display, 6, 9, 6));
+//		shell.setBackground(new Color(display, 6, 9, 6));
 //		shell.setImage(null);
 		this.loadWidgets();
 
@@ -49,4 +48,8 @@ public class EMSWindow {
 
 		this.table = new TableWidget(this.shell);
 	}
+//
+//	public void close() {
+//		this.shell.dispose();
+//	}
 }

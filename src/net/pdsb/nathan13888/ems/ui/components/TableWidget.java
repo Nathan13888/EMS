@@ -14,12 +14,15 @@ import org.eclipse.swt.widgets.TableItem;
 import net.pdsb.nathan13888.ems.Utils;
 import net.pdsb.nathan13888.ems.db.DB;
 import net.pdsb.nathan13888.ems.types.EmployeeInfo;
+import net.pdsb.nathan13888.ems.ui.InfoWindow;
 
 public class TableWidget {
 
 	private Table table;
 	private String[] titles = { "Employee #", "Name", "Email", "Gender", "Location" };
 	private ArrayList<EmployeeInfo> data;
+
+	private InfoWindow cur = null;
 
 	public TableWidget(Shell shell) {
 		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -38,6 +41,16 @@ public class TableWidget {
 					TableItem item = (TableItem) event.item;
 					int empNum = Integer.parseInt(item.getText(0));
 					System.out.println("Querying data for " + empNum);
+					EmployeeInfo qry = DB.query(empNum);
+
+					System.out.println(cur);
+
+					if (cur != null) {
+						System.out.println("Closing current info window " + cur);
+						cur.close();
+					}
+					cur = new InfoWindow(qry);
+					cur.open();
 				} else {
 					System.err.println("UNEXPECTED: " + event.item + " is not of type TableItem...");
 				}
