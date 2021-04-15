@@ -64,6 +64,11 @@ public class DB {
 		table.add(info);
 	}
 
+	public static EmployeeInfo remove(int num) {
+		System.out.println("Attempting to remove employee " + num);
+		return table.pop(num);
+	}
+
 	public static EmployeeInfo query(int num) {
 		return table.get(num);
 	}
