@@ -1,7 +1,11 @@
 package net.pdsb.nathan13888.ems.ui;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import net.pdsb.nathan13888.ems.Main;
@@ -33,6 +37,18 @@ public class EMSWindow {
 		this.loadWidgets();
 
 		this.shell.setBounds(display.getBounds());
+		shell.addListener(SWT.Close, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				boolean res = MessageDialog.openConfirm(shell, "Confirm", "Are you sure that you want to close EMS?");
+				System.out.println("Confirmation to close EMS: " + res);
+				if (!res) {
+					event.doit = false;
+				} else {
+					System.exit(0);
+				}
+			}
+		});
 
 		shell.open();
 

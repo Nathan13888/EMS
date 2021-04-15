@@ -46,7 +46,7 @@ public class InfoWindow {
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
-		display.dispose();
+//		display.dispose();
 	}
 
 	private void loadWidgets() {
@@ -54,6 +54,7 @@ public class InfoWindow {
 	}
 
 	public void close() {
-		this.shell.close();
+		if (!this.shell.isDisposed())
+			this.shell.close();
 	}
 }

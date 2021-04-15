@@ -21,9 +21,7 @@ public class Main {
 	}
 
 	public static void exit() {
-		System.out.println("Exiting EMS");
 		window.shell.close();
-		display.dispose();
 	}
 
 }
