@@ -10,7 +10,7 @@ public class EmployeeInfo {
 	public Address address;
 	public long homePhone, businessPhone;
 	public double deductionsRate; // decimal percentage
-	public String notes;
+	public String notes = "";
 
 	public EmployeeType type;
 
