@@ -64,4 +64,8 @@ public class DB {
 		table.add(info);
 	}
 
+	public static EmployeeInfo query(int num) {
+		return table.get(num);
+	}
+
 }
