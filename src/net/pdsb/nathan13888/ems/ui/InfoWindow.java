@@ -1,6 +1,7 @@
 package net.pdsb.nathan13888.ems.ui;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -18,9 +19,11 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 
+import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.Utils;
 import net.pdsb.nathan13888.ems.db.DB;
 import net.pdsb.nathan13888.ems.types.EmployeeInfo;
+import net.pdsb.nathan13888.ems.ui.forms.EmployeeInfoForm;
 
 public class InfoWindow {
 
@@ -105,6 +108,18 @@ public class InfoWindow {
 		buttons.setLayout(buttonsLayout);
 		Button b = new Button(buttons, SWT.PUSH);
 		b.setText("Edit Info");
+		b.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				EmployeeInfoForm wizard = new EmployeeInfoForm(info);
+				WizardDialog dialog = new WizardDialog(Main.window.shell, wizard);
+				dialog.open();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
 
 		b = new Button(buttons, SWT.PUSH);
 		b.setText("View Address");

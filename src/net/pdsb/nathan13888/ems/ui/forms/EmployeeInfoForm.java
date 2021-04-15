@@ -36,10 +36,25 @@ public class EmployeeInfoForm extends Wizard {
 		setNeedsProgressMonitor(true);
 	}
 
+	private boolean editMode = false;
+	private EmployeeInfo info;
+
+	public EmployeeInfoForm(EmployeeInfo info) {
+		this();
+		this.setWindowTitle("Edit employee " + info.empNumber);
+		this.info = info;
+		this.editMode = true;
+	}
+
 	@Override
 	public void addPages() {
-		infoPage = new InfoPage(selection);
-		salaryPage = new SalaryPage(selection);
+		if (this.editMode) {
+			infoPage = new InfoPage(selection, info);
+			salaryPage = new SalaryPage(selection, info);
+		} else {
+			infoPage = new InfoPage(selection);
+			salaryPage = new SalaryPage(selection);
+		}
 		this.addPage(infoPage);
 		this.addPage(salaryPage);
 	}
@@ -87,7 +102,10 @@ public class EmployeeInfoForm extends Wizard {
 		info.deductionsRate = deductionsRate;
 		info.notes = notes;
 
-		DB.add(info);
+		if (this.editMode)
+			DB.update(this.info.empNumber, info);
+		else
+			DB.add(info);
 		Main.window.table.reload();
 
 		return true;
@@ -111,6 +129,16 @@ class InfoPage extends WizardPage {
 	public Text homePhoneText;
 	public Text businessPhoneText;
 	public Text notesText;
+
+	private boolean editMode = false;
+	private EmployeeInfo info;
+
+	public InfoPage(ISelection selection, EmployeeInfo info) {
+		this(selection);
+		setTitle("Edit Employee " + info.empNumber);
+		this.editMode = true;
+		this.info = info;
+	}
 
 	public InfoPage(ISelection selection) {
 		super("newEmployee");
@@ -207,6 +235,29 @@ class InfoPage extends WizardPage {
 		gd.heightHint = 200;
 		notesText.setLayoutData(gd);
 
+		if (this.editMode) {
+			empNumberText.setText(String.valueOf(info.empNumber));
+			randomEmpNumber.setSelection(false);
+			randomEmpNumber.setEnabled(false);
+			firstNameText.setText(info.firstName);
+			lastNameText.setText(info.lastName);
+			emailText.setText(info.email);
+			switch (info.gender) {
+			case MALE:
+				maleButton.setSelection(true);
+				break;
+			case FEMALE:
+				femaleButton.setSelection(true);
+				break;
+			default:
+				otherButton.setSelection(true);
+			}
+			homeAddressText.setText(info.address.getAddress());
+			homePhoneText.setText(String.valueOf(info.homePhone));
+			businessPhoneText.setText(String.valueOf(info.businessPhone));
+			notesText.setText(info.notes);
+		}
+
 		dialogChanged();
 		setControl(container);
 	}
@@ -266,10 +317,20 @@ class SalaryPage extends WizardPage {
 	public Text wpyText;
 	public Text deductionsText;
 
+	private boolean editMode = false;
+	private EmployeeInfo info;
+
+	public SalaryPage(ISelection selection, EmployeeInfo info) {
+		this(selection);
+		setTitle("Edit Employee " + info.empNumber);
+		this.editMode = true;
+		this.info = info;
+	}
+
 	public SalaryPage(ISelection selection) { // TODO: employee image
 		super("newEmployee");
 		setTitle("New Employee");
-		setDescription("Enter employee info");
+		setDescription("Enter salary info");
 		this.selection = selection;
 	}
 
@@ -329,6 +390,19 @@ class SalaryPage extends WizardPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		deductionsText.setLayoutData(gd);
 		deductionsText.addModifyListener(new ModifyDialogEvent());
+
+		if (this.editMode) {
+			if (info instanceof FullTimeEmployee) {
+				fteButton.setSelection(true);
+				annualSalaryText.setText(String.valueOf(((FullTimeEmployee) info).yearlySalary));
+			} else if (info instanceof PartTimeEmployee) {
+				pteButton.setSelection(true);
+				hourlyWageText.setText(String.valueOf(((PartTimeEmployee) info).hourlyWage));
+				hpwText.setText(String.valueOf(((PartTimeEmployee) info).hoursPerWeek));
+				wpyText.setText(String.valueOf(((PartTimeEmployee) info).weeksPerYear));
+			}
+			deductionsText.setText(String.valueOf(info.deductionsRate));
+		}
 
 		dialogChanged();
 		setControl(container);
