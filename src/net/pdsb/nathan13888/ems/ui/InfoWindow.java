@@ -107,6 +107,19 @@ public class InfoWindow {
 		b.setText("Edit Info");
 
 		b = new Button(buttons, SWT.PUSH);
+		b.setText("View Address");
+		b.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				Utils.openWebpage("https://www.google.ca/maps/search/" + Utils.encodeURI(info.address.getAddress()));
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
+
+		b = new Button(buttons, SWT.PUSH);
 		b.setText("Remove Employee");
 		b.addSelectionListener(new SelectionListener() {
 			@SuppressWarnings("null")
@@ -146,7 +159,7 @@ public class InfoWindow {
 				new Info("Gender", Utils.toTitleCase(info.gender.toString())),
 				new Info("Address", info.address.getAddress()), new Info("Home Phone", String.valueOf(info.homePhone)),
 				new Info("Business Phone", String.valueOf(info.businessPhone)),
-				new Info("Annual Salary", String.valueOf(info.calcAnnualGrossIncome())),
+				new Info("Annual Salary", "$" + String.valueOf(info.calcAnnualGrossIncome())),
 				new Info("Deductions Rate", String.valueOf(info.deductionsRate)) };
 
 		Label l;
