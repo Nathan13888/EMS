@@ -5,7 +5,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -18,6 +17,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.Utils;
@@ -69,7 +69,7 @@ public class InfoWindow {
 //		shell.pack();
 
 //		shell.setBounds(display.getBounds());
-		shell.setSize(1200, 700);
+		shell.setSize(1200, 900);
 		Monitor primary = display.getPrimaryMonitor();
 		Rectangle bounds = primary.getBounds();
 		Rectangle rect = shell.getBounds();
@@ -189,13 +189,20 @@ public class InfoWindow {
 			l.setAlignment(SWT.RIGHT);
 		}
 		l = new Label(shell, SWT.NONE);
-		l.setLayoutData(data);
 		l.setText("Notes");
-		l = new Label(shell, SWT.WRAP | SWT.BORDER);
-		l.setText(info.notes);
-		l.setLayoutData(data);
-		l.setBackground(new Color(Display.getDefault(), 255, 255, 255));
-		l.setForeground(new Color(Display.getDefault(), 10, 10, 10));
+		l.setLayoutData(new GridData(SWT.DEFAULT, SWT.TOP, false, false));
+		Text t = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL);
+		data = new GridData(GridData.FILL_BOTH);
+		data.heightHint = 200;
+		t.setLayoutData(data);
+		t.setText(info.notes);
+		t.setEnabled(false);
+
+//		l = new Label(shell, SWT.WRAP | SWT.BORDER);
+//		l.setText(info.notes);
+//		l.setLayoutData(data);
+//		l.setBackground(new Color(Display.getDefault(), 255, 255, 255));
+//		l.setForeground(new Color(Display.getDefault(), 10, 10, 10));
 	}
 
 	private void createLine(Composite parent) {
