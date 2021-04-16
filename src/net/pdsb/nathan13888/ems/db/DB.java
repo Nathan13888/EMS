@@ -20,9 +20,21 @@ public class DB {
 	public static boolean MODIFIED = false;
 
 	public static void generateRandomData() {
-		String[] first = { "John", "Bob", "Daniel", "Tom", "Jack" };
+		String[] first = { "John", "Bob", "Daniel", "Tom", "Jack", "Robert", "Michael", "William", "Nathan", "David",
+				"Christopher", "Mark", "Kevin", "Eric", "Lisa", "Linda", "Elizabeth", "Karen", "Helen", "Sharon",
+				"Jessica", "Angela", "Anna", "Christine", "Alice", "Frances" };
 
-		String[] last = { "Green", "White", "Black", "Light", "Roger" };
+		String[] last = { "Green", "White", "Black", "Brown", "Lee", "Smith", "Allen", "Morris", "Taylor", "Bell",
+				"Smith", "Light", "Roger", "Ford", "Scott", "Parker" };
+
+		String[] addresses = { "The Statue of Liberty in New York, USA", "The Eiffel Tower in Paris, France",
+				"Louvre Museum, Rue de Rivoli, Paris, France", "St. Basil’s Cathedral in Moscow, Russia",
+				"Blue Domed Church in Santorini, Greece", "CHJC+Q4 Bohaizhen, Huairou District, Beijing, China",
+				"The Great Sphinx at Giza, Egypt", "Palace of Versailles",
+				"1600 Pennsylvania Avenue NW, Washington, DC 20500, United States", "The Taj Mahal in Agra, India",
+				"3225 Erindale Station Rd, Mississauga, ON L5C 1Y5" };
+
+		int[] phoneCodes = { 647, 416, 905, 226, 249, 289, 705, 907 };
 
 		Random r = new Random();
 		for (int i = 0; i < r.nextInt(100) + 50; i++) {
@@ -31,9 +43,11 @@ public class DB {
 			String l = last[r.nextInt(last.length)];
 			String email = (f + l).toLowerCase() + "@email.com";
 			Gender g = r.nextInt(2) == 0 ? Gender.MALE : Gender.FEMALE;
-			String loc = "some location";
-			double dR = r.nextDouble();
-			double wage = (r.nextInt(50) + 50) * 1000;
+			String loc = addresses[r.nextInt(addresses.length)];
+			long hp = phoneCodes[r.nextInt(phoneCodes.length)] * 1000000 + r.nextInt(10000000);
+			long bp = phoneCodes[r.nextInt(phoneCodes.length)] * 1000000 + r.nextInt(10000000);
+			double dR = Math.round(r.nextDouble() * 100.0) / 100.0;
+			double wage = Math.round(((r.nextInt(50) + 50) * 1000) * 10000.0) / 10000.0;
 			double hourlyWage = r.nextInt(20) + 14;
 			double hoursPerWeek = r.nextInt(16) + 30;
 			double weeksPerYear = 52 - r.nextInt(5);
@@ -47,6 +61,9 @@ public class DB {
 			info.email = email;
 			info.address = new Address(loc);
 			info.deductionsRate = dR;
+			info.homePhone = hp;
+			info.businessPhone = bp;
+			info.notes = "Some information about " + f + " " + l + "...\n\n NEW LINES WORK TOO!";
 
 			table.add(info);
 		}
