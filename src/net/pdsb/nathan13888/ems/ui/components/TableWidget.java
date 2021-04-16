@@ -90,6 +90,14 @@ public class TableWidget {
 		System.out.println("Reloading TableWidget...");
 		this.table.removeAll();
 		this.load(employees);
+		EmployeeInfo i = DB.query(cur.info.empNumber);
+		if (i != null) {
+			this.cur.close();
+			cur = new InfoWindow(i);
+			cur.open();
+		} else {
+			System.out.println("COULD NOT FIND THE EMPLOYEE WITH THE SAME INFO ANYMORE! (prob changed emp number)");
+		}
 	}
 
 	public ArrayList<EmployeeInfo> getData() {

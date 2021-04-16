@@ -29,9 +29,10 @@ public class InfoWindow {
 
 	private Display display;
 	private Shell shell;
-	private EmployeeInfo info;
+	public EmployeeInfo info;
 	private GridLayout lay;
 	private GridData fullWidthData = new GridData(GridData.FILL_HORIZONTAL);
+	private WizardDialog editDialog;
 
 	public InfoWindow(EmployeeInfo info) {
 		if (info == null) {
@@ -111,9 +112,9 @@ public class InfoWindow {
 		b.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				EmployeeInfoForm wizard = new EmployeeInfoForm(info);
-				WizardDialog dialog = new WizardDialog(Main.window.shell, wizard);
-				dialog.open();
+				EmployeeInfoForm editWizard = new EmployeeInfoForm(info);
+				editDialog = new WizardDialog(Main.window.shell, editWizard);
+				editDialog.open();
 			}
 
 			@Override
@@ -211,6 +212,8 @@ public class InfoWindow {
 	}
 
 	public void close() {
+//		if (this.editDialog != null)
+//			this.editDialog.close();
 		if (!this.shell.isDisposed())
 			this.shell.close();
 	}
