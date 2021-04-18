@@ -115,4 +115,12 @@ public class MyHashTable {
 		System.out.println();
 	}
 
+	public int size() {
+		int cnt = 0;
+		for (ArrayList<EmployeeInfo> b : buckets) {
+			cnt += b.size();
+		}
+		return cnt;
+	}
+
 }
