@@ -151,6 +151,7 @@ public class InfoWindow {
 					close();
 					MessageDialog.openInformation(shell, "Info", "Successfully removed employee " + res.empNumber);
 				}
+				Main.window.table.reload();
 			}
 
 			@Override

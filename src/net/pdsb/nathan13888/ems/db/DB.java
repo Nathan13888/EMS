@@ -83,7 +83,7 @@ public class DB {
 			bos.write(bytes);
 			bos.close();
 			fos.close();
-			System.out.print("Data written to '" + DB_FILE.getAbsolutePath() + "' successfully.");
+			System.out.println("Data written to '" + DB_FILE.getAbsolutePath() + "' successfully!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
