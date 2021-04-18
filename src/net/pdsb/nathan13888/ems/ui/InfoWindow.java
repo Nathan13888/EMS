@@ -1,5 +1,7 @@
 package net.pdsb.nathan13888.ems.ui;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -23,6 +25,9 @@ import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.Utils;
 import net.pdsb.nathan13888.ems.db.DB;
 import net.pdsb.nathan13888.ems.types.EmployeeInfo;
+import net.pdsb.nathan13888.ems.types.EmployeeType;
+import net.pdsb.nathan13888.ems.types.FullTimeEmployee;
+import net.pdsb.nathan13888.ems.types.PartTimeEmployee;
 import net.pdsb.nathan13888.ems.ui.forms.EmployeeInfoForm;
 
 public class InfoWindow {
@@ -48,6 +53,7 @@ public class InfoWindow {
 		lay = new GridLayout(2, false);
 		lay.marginTop = 10;
 		lay.marginLeft = 30;
+		lay.marginRight = 30;
 		lay.marginBottom = 30;
 		lay.verticalSpacing = 10;
 		fullWidthData.horizontalSpan = 2;
@@ -70,7 +76,7 @@ public class InfoWindow {
 //		shell.pack();
 
 //		shell.setBounds(display.getBounds());
-		shell.setSize(1200, 900);
+		shell.setSize(1200, 1000);
 		Monitor primary = display.getPrimaryMonitor();
 		Rectangle bounds = primary.getBounds();
 		Rectangle rect = shell.getBounds();
@@ -171,13 +177,25 @@ public class InfoWindow {
 				this.value = value;
 			}
 		}
-		Info[] i = { new Info("Name", info.firstName + " " + info.lastName),
+		ArrayList<Info> i = new ArrayList<Info>();
+		Info[] II = new Info[] { new Info("Name", info.firstName + " " + info.lastName),
 				new Info("Type", Utils.toTitleCase(info.type.toString())), new Info("Email", info.email),
 				new Info("Gender", Utils.toTitleCase(info.gender.toString())),
 				new Info("Address", info.address.getAddress()), new Info("Home Phone", String.valueOf(info.homePhone)),
 				new Info("Business Phone", String.valueOf(info.businessPhone)),
-				new Info("Annual Salary", "$" + String.valueOf(info.calcAnnualGrossIncome())),
+				new Info("Calculated Annual Income", "$" + String.valueOf(info.calcAnnualGrossIncome())),
 				new Info("Deductions Rate", String.valueOf(info.deductionsRate)) };
+		for (Info x : II)
+			i.add(x);
+
+		if (info.type == EmployeeType.FULLTIME) {
+			i.add(new Info("Yearly Salary", "$" + String.valueOf(((FullTimeEmployee) info).yearlySalary)));
+		} else {
+			PartTimeEmployee pte = (PartTimeEmployee) info;
+			i.add(new Info("Hours Per Week", String.valueOf(pte.hoursPerWeek)));
+			i.add(new Info("Weeks Per Year", String.valueOf(pte.weeksPerYear)));
+			i.add(new Info("Hourly Wage", "$" + String.valueOf(pte.hourlyWage)));
+		}
 
 		Label l;
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);

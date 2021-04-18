@@ -24,6 +24,19 @@ public class EMSMenuBar {
 
 		MenuItem searchHeader = new MenuItem(bar, SWT.PUSH);
 		searchHeader.setText("&Search");
+		searchHeader.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				new SearchWindow();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 		MenuItem helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		helpMenuHeader.setText("&Help");

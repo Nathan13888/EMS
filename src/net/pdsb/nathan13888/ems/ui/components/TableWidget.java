@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import net.pdsb.nathan13888.ems.Main;
 import net.pdsb.nathan13888.ems.Utils;
 import net.pdsb.nathan13888.ems.db.DB;
 import net.pdsb.nathan13888.ems.types.EmployeeInfo;
@@ -19,8 +20,8 @@ import net.pdsb.nathan13888.ems.ui.InfoWindow;
 public class TableWidget {
 
 	private Table table;
-	private String[] titles = { "Employee #", "Name", "Email", "Gender", "Location" };
-	private ArrayList<EmployeeInfo> data;
+	private String[] titles = { "Employee #", "Type", "Name", "Email", "Gender", "Location" };
+	public ArrayList<EmployeeInfo> data;
 
 	public InfoWindow cur = null;
 
@@ -74,10 +75,11 @@ public class TableWidget {
 		for (EmployeeInfo info : employees) {
 			TableItem item = new TableItem(table, SWT.NONE);
 			item.setText(0, String.valueOf(info.empNumber));
-			item.setText(1, info.firstName + " " + info.lastName);
-			item.setText(2, info.email);
-			item.setText(3, Utils.toTitleCase(info.gender.name()));
-			item.setText(4, info.address.getAddress());
+			item.setText(1, info.type.toString());
+			item.setText(2, info.firstName + " " + info.lastName);
+			item.setText(3, info.email);
+			item.setText(4, Utils.toTitleCase(info.gender.name()));
+			item.setText(5, info.address.getAddress());
 		}
 		for (int i = 0; i < titles.length; i++) {
 			table.getColumn(i).pack();
@@ -104,6 +106,7 @@ public class TableWidget {
 		} else {
 			System.out.println("COULD NOT FIND THE EMPLOYEE WITH THE SAME INFO ANYMORE! (prob changed emp number)");
 		}
+		Main.window.infowindow.update();
 	}
 
 	public ArrayList<EmployeeInfo> getData() {

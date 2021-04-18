@@ -18,6 +18,7 @@ public class EMSWindow {
 	public Shell shell;
 	public TableWidget table;
 	public EMSMenuBar menubar;
+	public DBInfoWindow infowindow;
 
 	public EMSWindow(Display display) {
 		Main.window = this;
@@ -64,9 +65,31 @@ public class EMSWindow {
 		menubar = new EMSMenuBar(this.shell);
 
 		this.table = new TableWidget(this.shell);
-	}
+		this.infowindow = new DBInfoWindow(this.table);
+		infowindow.open();
+//		shell.addk
+//		shell.addFocusListener(new FocusListener() {
 //
-//	public void close() {
-//		this.shell.dispose();
-//	}
+//			@Override
+//			public void focusLost(FocusEvent arg0) {
+//			}
+//
+//			@Override
+//			public void focusGained(FocusEvent arg0) {
+//				if (infowindow != null && !infowindow.shell.isEnabled())
+//					infowindow.open();
+//			}
+//		});
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				infowindow.open();
+//			}
+//		}).start();
+	}
+
+//
+	public void close() {
+		this.shell.dispose();
+	}
 }
