@@ -1,8 +1,22 @@
 package net.pdsb.nathan13888.ems.db;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+
 import org.eclipse.jface.dialogs.MessageDialog;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import net.pdsb.nathan13888.ems.Config;
 import net.pdsb.nathan13888.ems.Main;
@@ -18,6 +32,150 @@ public class DB {
 	public static MyHashTable table = new MyHashTable(Config.BUCKETS);
 
 	public static boolean MODIFIED = false;
+	public static File DB_FILE = null;
+
+	public static void openDB() {
+		File res = browseFile("Open DB");
+		if (res != null) {
+			MessageDialog.openInformation(Main.window.shell, "Info", "Selected file: " + res.getAbsolutePath());
+			DB_FILE = res;
+			loadCurrent();
+		} else {
+			System.err.println("ERROR RETRIEVING FILE... (potentially because user did not choose file)");
+			MessageDialog.openError(Main.window.shell, "Error", "You must select a valid archive file");
+		}
+	}
+
+	public static void saveDB() {
+		if (!MODIFIED) {
+			System.out.println("DB: is unmodified and doesn't need to be saved");
+			return;
+		}
+		if (DB_FILE == null) {
+			System.out.println("DB: no file to save to...");
+			return;
+		}
+		System.out.println("Saving DB...");
+		saveCurrent();
+		System.out.println("Saved DB");
+	}
+
+	public static void saveAsDB() {
+		File res = browseFile("");
+		if (res != null) {
+			DB_FILE = res;
+			saveCurrent();
+		} else {
+			System.err.println("Some problems with choosing file during SAVE AS");
+		}
+	}
+
+	private static void saveCurrent() {
+		DB_FILE.delete();
+		Gson gson = new Gson();
+		String serialized = gson.toJson(table.buckets);
+		System.out.println("*** SERIALIZED DATABASE ***");
+		System.out.println(serialized);
+
+		try (FileOutputStream fos = new FileOutputStream(DB_FILE);
+				BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+			byte[] bytes = serialized.getBytes();
+			bos.write(bytes);
+			bos.close();
+			fos.close();
+			System.out.print("Data written to '" + DB_FILE.getAbsolutePath() + "' successfully.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void loadCurrent() {
+		if (DB_FILE == null) {
+			System.out.println("DB: no file has been loaded yet");
+			return;
+		}
+		MODIFIED = false;
+		System.out.println("LOADING CURRENT DATABASE FILE: " + DB_FILE.getAbsolutePath());
+
+		String output = "";
+		try {
+			String s;
+			BufferedReader br = null;
+			FileReader freader;
+			freader = new FileReader(DB_FILE);
+			br = new BufferedReader(freader);
+			while ((s = br.readLine()) != null) {
+//				System.out.println(s);
+				output += s;
+			}
+			freader.close();
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("READ FROM FILE:");
+		System.out.println(output);
+		EmployeeDeserializer des = new EmployeeDeserializer();
+		Gson gson = new GsonBuilder().registerTypeAdapter(EmployeeInfo.class, des).create();
+
+		ArrayList<EmployeeInfo>[] buckets = gson.fromJson(output, new TypeToken<ArrayList<EmployeeInfo>[]>() {
+		}.getType());
+		System.out.println(buckets);
+		if (buckets == null)
+			table = new MyHashTable(Config.BUCKETS);
+		else
+			table = new MyHashTable(buckets);
+		Main.window.table.reload();
+	}
+
+	private static File browseFile(String name) { // expects .emsdb files only
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setFileHidingEnabled(false);
+		chooser.setFileFilter(new FileFilter() {
+			@Override
+			public String getDescription() {
+				return "EMS Database Archives (.emsdb)";
+			}
+
+			@Override
+			public boolean accept(File f) {
+				if (f.isDirectory())
+					return true;
+				if (f.isFile() && f.getAbsolutePath().endsWith(".emsdb"))
+					return true;
+				return false;
+			}
+		});
+		chooser.setToolTipText(name);
+		int result = chooser.showOpenDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selected = chooser.getSelectedFile();
+			System.out.println("Selected file: " + selected.getAbsolutePath());
+			if (!selected.exists())
+				try {
+					System.out.println("File with path " + selected.getAbsolutePath()
+							+ " was selected but does not exist! CREATING FILE NOW.");
+					selected.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if (/* selected.canRead() && selected.canWrite() && */selected.isFile()
+					&& selected.getPath().endsWith(".emsdb")) {
+				return selected;
+			} else {
+				System.out.println("INVALID FILE SELECTED...");
+			}
+		}
+		return null;
+	}
+
+	public static int size() {
+		return table.size();
+	}
 
 	public static void generateRandomData() {
 		String[] first = { "John", "Bob", "Daniel", "Tom", "Jack", "Robert", "Michael", "William", "Nathan", "David",
@@ -108,6 +266,11 @@ public class DB {
 
 	public static EmployeeInfo query(int num) {
 		return table.get(num);
+	}
+
+	public static void updateStatus() {
+		MODIFIED = true;
+		Main.window.menubar.fileMenu.saveDB.setEnabled((DB_FILE != null) && MODIFIED);
 	}
 
 }
