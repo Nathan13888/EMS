@@ -1,6 +1,6 @@
 package net.pdsb.nathan13888.ems.types;
 
-public class EmployeeInfo {
+public abstract class EmployeeInfo {
 
 	public int empNumber;
 	public String firstName;
@@ -21,7 +21,5 @@ public class EmployeeInfo {
 		this.gender = g;
 	}
 
-	public double calcAnnualGrossIncome() {
-		return 0;
-	}
+	public abstract double calcAnnualGrossIncome();
 }
