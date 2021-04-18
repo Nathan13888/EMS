@@ -12,6 +12,10 @@ public class MyHashTable {
 
 	// CONSTRUCTOR
 
+	public MyHashTable(ArrayList<EmployeeInfo>[] buckets) {
+		this.buckets = buckets;
+	}
+
 	@SuppressWarnings("unchecked")
 	public MyHashTable(int howManyBuckets) { // assuming howManyBuckets is valid
 		this.buckets = new ArrayList[howManyBuckets];
