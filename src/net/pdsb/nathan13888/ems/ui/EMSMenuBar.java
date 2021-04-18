@@ -12,12 +12,14 @@ import net.pdsb.nathan13888.ems.ui.menus.FileMenu;
 
 public class EMSMenuBar {
 
+	public FileMenu fileMenu;
+
 	public EMSMenuBar(Shell shell) {
 		Menu bar = new Menu(shell, SWT.BAR);
 
 		MenuItem fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		fileMenuHeader.setText("&File");
-		FileMenu fileMenu = new FileMenu(shell);
+		fileMenu = new FileMenu(shell);
 		fileMenuHeader.setMenu(fileMenu.menu);
 
 		MenuItem searchHeader = new MenuItem(bar, SWT.PUSH);

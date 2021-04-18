@@ -216,5 +216,6 @@ public class InfoWindow {
 //			this.editDialog.close();
 		if (!this.shell.isDisposed())
 			this.shell.close();
+		Main.window.table.cur = null;
 	}
 }

@@ -22,7 +22,7 @@ public class TableWidget {
 	private String[] titles = { "Employee #", "Name", "Email", "Gender", "Location" };
 	private ArrayList<EmployeeInfo> data;
 
-	private InfoWindow cur = null;
+	public InfoWindow cur = null;
 
 	public TableWidget(Shell shell) {
 		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -50,7 +50,10 @@ public class TableWidget {
 						cur.close();
 					}
 					cur = new InfoWindow(qry);
-					cur.open();
+					if (qry != null)
+						cur.open();
+					else
+						System.out.println("TableWidget: QRY resulted in null");
 				} else {
 					System.err.println("UNEXPECTED: " + event.item + " is not of type TableItem...");
 				}
@@ -90,7 +93,10 @@ public class TableWidget {
 		System.out.println("Reloading TableWidget...");
 		this.table.removeAll();
 		this.load(employees);
-		EmployeeInfo i = DB.query(cur.info.empNumber);
+
+		EmployeeInfo i = null;
+		if (cur != null)
+			i = DB.query(cur.info.empNumber);
 		if (i != null) {
 			this.cur.close();
 			cur = new InfoWindow(i);

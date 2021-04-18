@@ -17,6 +17,7 @@ public class EMSWindow {
 
 	public Shell shell;
 	public TableWidget table;
+	public EMSMenuBar menubar;
 
 	public EMSWindow(Display display) {
 		Main.window = this;
@@ -60,7 +61,7 @@ public class EMSWindow {
 	}
 
 	private void loadWidgets() {
-		new EMSMenuBar(this.shell);
+		menubar = new EMSMenuBar(this.shell);
 
 		this.table = new TableWidget(this.shell);
 	}
