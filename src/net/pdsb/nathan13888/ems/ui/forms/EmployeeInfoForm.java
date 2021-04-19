@@ -68,7 +68,7 @@ public class EmployeeInfoForm extends Wizard {
 				: Integer.parseInt(infoPage.empNumberText.getText());
 		String firstName = infoPage.firstNameText.getText();
 		String lastName = infoPage.lastNameText.getText();
-		String email = infoPage.lastNameText.getText();
+		String email = infoPage.emailText.getText();
 		Gender gender;
 		if (infoPage.maleButton.getSelection())
 			gender = Gender.MALE;

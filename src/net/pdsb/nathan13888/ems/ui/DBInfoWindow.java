@@ -122,8 +122,8 @@ public class DBInfoWindow {
 	public void update() {
 		lls[0].setText(tw.data.size() + " of " + DB.size() + " employees");
 		lls[1].setText(DB.MODIFIED ? "YES" : "NO");
-		lls[2].setText(
-				DB.DB_FILE == null ? "UNKNOWN" : String.valueOf(DB.DB_FILE.getTotalSpace() / Math.pow(1024, 3)) + "MB");
+		lls[2].setText(DB.DB_FILE == null ? "UNKNOWN"
+				: String.valueOf(DB.DB_FILE.getTotalSpace() / 8 / Math.pow(1024, 3)) + "KB");
 		lls[3].setText(DB.DB_FILE == null ? "UNKNOWN" : Utils.getFileCreation(DB.DB_FILE));
 		lls[4].setText(DB.DB_FILE == null ? "UNKNOWN" : Utils.getFileModified(DB.DB_FILE));
 		lls[5].setText(DB.DB_FILE == null ? "UNSAVED" : DB.DB_FILE.getAbsolutePath());
