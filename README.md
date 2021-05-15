@@ -11,3 +11,7 @@ An EMS software made in Java with SWT and JFace.
 - Portable database format: JSON-based
 - Database information dashboard
 - *(other thoughtful quirks)...*
+
+## Screenshots
+*Random...*
+![](./screenshot.png)
